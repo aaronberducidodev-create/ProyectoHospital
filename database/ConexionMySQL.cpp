@@ -91,11 +91,16 @@ void ConexionMySQL::cargarPacientesDesdeMySQL(ListaPacientes &lista) {
             continue;
         }
 
-        long long id = stoll(idStr);
-        int edad = stoi(edadStr);
+        try {
+            long long id = stoll(idStr);
+            int edad = stoi(edadStr);
 
-        if (lista.buscarPaciente(id) == nullptr) {
-            lista.insertarPaciente(id, nombre, edad, dpi);
+            if (lista.buscarPaciente(id) == nullptr) {
+                lista.insertarPaciente(id, nombre, edad, dpi);
+            }
+        }
+        catch (...) {
+            cout << "Error al cargar paciente desde MySQL. Datos invalidos." << endl;
         }
     }
 
@@ -156,17 +161,19 @@ void ConexionMySQL::cargarIdsPacientesEnArbolB(ArbolB &arbolB) {
 
     while (getline(archivo, linea)) {
         if (linea != "") {
-            int id = stoi(linea);
-            arbolB.insertar(id);
+            try {
+                int id = stoi(linea);
+                arbolB.insertar(id);
+            }
+            catch (...) {
+                cout << "ID invalido encontrado al cargar Arbol B." << endl;
+            }
         }
     }
 
     archivo.close();
 
     cout << "IDs cargados desde MySQL al Arbol B correctamente." << endl;
-
-
-    
 }
 
 // Actualizar cita en MySQL usando PHP + curl.exe

@@ -1,7 +1,28 @@
 #include "HashPacientes.h"
 #include <iostream>
+#include <new>
+#include <cctype>
 
 using namespace std;
+
+// =============================================
+// FUNCION AUXILIAR: VALIDAR DPI
+// =============================================
+// Valida que el DPI tenga exactamente 13 dígitos.
+// =============================================
+bool validarDpiHash(const string& dpi) {
+    if (dpi.length() != 13) {
+        return false;
+    }
+
+    for (char c : dpi) {
+        if (!isdigit((unsigned char)c)) {
+            return false;
+        }
+    }
+
+    return true;
+}
 
 // =============================================
 // CONSTRUCTOR DEL NODO HASH
@@ -34,6 +55,8 @@ HashPacientes::HashPacientes() {
 // =============================================
 // Libera la memoria utilizada por todos los
 // nodos almacenados en la tabla hash.
+// Nota: no elimina el objeto Paciente porque
+// ese se libera en ListaPacientes.
 // =============================================
 HashPacientes::~HashPacientes() {
     for (int i = 0; i < TAM; i++) {
@@ -74,13 +97,40 @@ int HashPacientes::funcionHash(string dpi) {
 // Inserta un paciente utilizando su DPI
 // como clave.
 //
-// Utiliza encadenamiento para resolver
-// colisiones dentro de la tabla hash.
+// Validaciones:
+// - DPI válido de 13 dígitos.
+// - Paciente no nulo.
+// - Evita DPI duplicado.
+// - Maneja error de memoria.
 // =============================================
 void HashPacientes::insertar(string dpi, Paciente* paciente) {
+
+    if (!validarDpiHash(dpi)) {
+        cout << "Error: DPI invalido para insertar en tabla hash." << endl;
+        return;
+    }
+
+    if (paciente == nullptr) {
+        cout << "Error: paciente nulo, no se puede insertar en tabla hash." << endl;
+        return;
+    }
+
+    if (buscar(dpi) != nullptr) {
+        cout << "Error: ya existe un paciente con ese DPI en la tabla hash." << endl;
+        return;
+    }
+
     int indice = funcionHash(dpi);
 
-    NodoHash* nuevo = new NodoHash(dpi, paciente);
+    NodoHash* nuevo = nullptr;
+
+    try {
+        nuevo = new NodoHash(dpi, paciente);
+    }
+    catch (bad_alloc&) {
+        cout << "Error: no se pudo reservar memoria para el nodo hash." << endl;
+        return;
+    }
 
     // Encadenamiento: se inserta al inicio de la posición
     nuevo->siguiente = tabla[indice];
@@ -96,6 +146,11 @@ void HashPacientes::insertar(string dpi, Paciente* paciente) {
 // correspondiente hasta encontrar la clave.
 // =============================================
 Paciente* HashPacientes::buscar(string dpi) {
+
+    if (!validarDpiHash(dpi)) {
+        return nullptr;
+    }
+
     int indice = funcionHash(dpi);
 
     NodoHash* actual = tabla[indice];
@@ -108,7 +163,6 @@ Paciente* HashPacientes::buscar(string dpi) {
         actual = actual->siguiente;
     }
 
-    // Retorna nullptr si no existe
     return nullptr;
 }
 

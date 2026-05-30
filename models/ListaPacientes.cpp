@@ -1,5 +1,6 @@
 #include "ListaPacientes.h"
 #include <iostream>
+#include <new>
 
 using namespace std;
 
@@ -48,9 +49,28 @@ bool ListaPacientes::estaVacia() {
 //
 // Estructura utilizada:
 // Lista simplemente enlazada.
+//
+// Validaciones:
+// - Evita insertar pacientes con ID duplicado.
+// - Verifica si hubo error al reservar memoria.
 // =============================================
 void ListaPacientes::insertarPaciente(long long id, string nombre, int edad, string dpi) {
-    Paciente* nuevo = new Paciente(id, nombre, edad, dpi);
+
+    // Evitar pacientes duplicados por ID
+    if (buscarPaciente(id) != nullptr) {
+        cout << "Error: ya existe un paciente con ese ID." << endl;
+        return;
+    }
+
+    Paciente* nuevo = nullptr;
+
+    try {
+        nuevo = new Paciente(id, nombre, edad, dpi);
+    }
+    catch (bad_alloc&) {
+        cout << "Error: no se pudo reservar memoria para el paciente." << endl;
+        return;
+    }
 
     nuevo->siguiente = cabeza;
     cabeza = nuevo;
@@ -61,6 +81,7 @@ void ListaPacientes::insertarPaciente(long long id, string nombre, int edad, str
 // =============================================
 // Recorre la lista hasta encontrar
 // un paciente con el ID solicitado.
+// Si no lo encuentra, retorna nullptr.
 // =============================================
 Paciente* ListaPacientes::buscarPaciente(long long id) {
     Paciente* actual = cabeza;
@@ -82,14 +103,17 @@ Paciente* ListaPacientes::buscarPaciente(long long id) {
 // Elimina un paciente utilizando su ID.
 //
 // Caso 1:
-// El paciente es la cabeza.
+// La lista está vacía.
 //
 // Caso 2:
-// El paciente se encuentra en cualquier
-// otra posición de la lista.
+// El paciente es la cabeza.
+//
+// Caso 3:
+// El paciente está en medio o al final.
 // =============================================
 bool ListaPacientes::eliminarPaciente(long long id) {
     if (cabeza == nullptr) {
+        cout << "No hay pacientes registrados para eliminar." << endl;
         return false;
     }
 
@@ -115,6 +139,7 @@ bool ListaPacientes::eliminarPaciente(long long id) {
         actual = actual->siguiente;
     }
 
+    cout << "Paciente no encontrado para eliminar." << endl;
     return false;
 }
 
@@ -123,6 +148,8 @@ bool ListaPacientes::eliminarPaciente(long long id) {
 // =============================================
 // Recorre toda la lista enlazada
 // mostrando la información de cada paciente.
+//
+// Si la lista está vacía, muestra un mensaje.
 // =============================================
 void ListaPacientes::mostrarPacientes() {
     if (cabeza == nullptr) {

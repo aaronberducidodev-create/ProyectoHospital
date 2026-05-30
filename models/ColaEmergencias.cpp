@@ -1,5 +1,6 @@
 #include "ColaEmergencias.h"
 #include <iostream>
+#include <new>
 
 using namespace std;
 
@@ -29,6 +30,8 @@ ColaEmergencias::ColaEmergencias() {
 // =============================================
 // Libera todos los nodos pendientes
 // de la cola.
+// Nota: no elimina el objeto Paciente,
+// porque ese pertenece a ListaPacientes.
 // =============================================
 ColaEmergencias::~ColaEmergencias() {
     while (!estaVacia()) {
@@ -46,9 +49,33 @@ bool ColaEmergencias::estaVacia() {
 // =============================================
 // Agrega un paciente a la cola de emergencias
 // según su prioridad de triaje.
+//
+// Validaciones:
+// - Paciente no nulo.
+// - Prioridad válida entre 1 y 3.
+// - Manejo de error de memoria.
 // =============================================
 void ColaEmergencias::encolar(Paciente* paciente) {
-    NodoCola* nuevo = new NodoCola(paciente);
+
+    if (paciente == nullptr) {
+        cout << "Error: paciente nulo, no se puede encolar." << endl;
+        return;
+    }
+
+    if (paciente->getPrioridad() < 1 || paciente->getPrioridad() > 3) {
+        cout << "Error: prioridad invalida. Debe ser 1, 2 o 3." << endl;
+        return;
+    }
+
+    NodoCola* nuevo = nullptr;
+
+    try {
+        nuevo = new NodoCola(paciente);
+    }
+    catch (bad_alloc&) {
+        cout << "Error: no se pudo reservar memoria para la cola." << endl;
+        return;
+    }
 
     // ===============================
     // COLA CON PRIORIDAD / TRIAJE
@@ -81,6 +108,7 @@ void ColaEmergencias::encolar(Paciente* paciente) {
 
     while (
         actual->siguiente != nullptr &&
+        actual->siguiente->paciente != nullptr &&
         actual->siguiente->paciente->getPrioridad() <= paciente->getPrioridad()
     ) {
         actual = actual->siguiente;
@@ -134,11 +162,15 @@ void ColaEmergencias::mostrarCola() {
     NodoCola* actual = frente;
 
     while (actual != nullptr) {
-        actual->paciente->mostrar();
+        if (actual->paciente != nullptr) {
+            actual->paciente->mostrar();
 
-        cout << "Prioridad de emergencia: "
-             << actual->paciente->getPrioridad()
-             << endl;
+            cout << "Prioridad de emergencia: "
+                 << actual->paciente->getPrioridad()
+                 << endl;
+        } else {
+            cout << "Nodo con paciente nulo." << endl;
+        }
 
         cout << "---------------------" << endl;
 

@@ -1,13 +1,11 @@
 #include "ArbolAVLEdades.h"
 #include <iostream>
+#include <new>
 
 using namespace std;
 
 // =============================================
 // CONSTRUCTOR DEL NODO AVL
-// =============================================
-// Cada nodo almacena un paciente,
-// enlaces a sus hijos y su altura.
 // =============================================
 NodoAVL::NodoAVL(Paciente* paciente) {
     this->paciente = paciente;
@@ -19,8 +17,6 @@ NodoAVL::NodoAVL(Paciente* paciente) {
 // =============================================
 // CONSTRUCTOR DEL ÁRBOL AVL
 // =============================================
-// Inicializa el árbol vacío.
-// =============================================
 ArbolAVLEdades::ArbolAVLEdades() {
     raiz = nullptr;
 }
@@ -28,124 +24,144 @@ ArbolAVLEdades::ArbolAVLEdades() {
 // =============================================
 // DESTRUCTOR
 // =============================================
-// Libera toda la memoria utilizada
-// por los nodos del árbol.
-// =============================================
 ArbolAVLEdades::~ArbolAVLEdades() {
     liberarMemoria(raiz);
+    raiz = nullptr;
 }
 
 // =============================================
-// LIBERACIÓN RECURSIVA DE MEMORIA
-// =============================================
-// Recorre el árbol en postorden y elimina
-// cada nodo almacenado.
+// LIBERACIÓN DE MEMORIA
 // =============================================
 void ArbolAVLEdades::liberarMemoria(NodoAVL* nodo) {
     if (nodo == nullptr) return;
 
     liberarMemoria(nodo->izquierda);
     liberarMemoria(nodo->derecha);
+
     delete nodo;
 }
 
 // =============================================
-// OBTENER ALTURA DEL NODO
-// =============================================
-// Devuelve la altura de un nodo AVL.
+// ALTURA
 // =============================================
 int ArbolAVLEdades::altura(NodoAVL* nodo) {
     if (nodo == nullptr) return 0;
     return nodo->altura;
 }
 
-// Función auxiliar para obtener el máximo
-// entre dos valores.
+// =============================================
+// MÁXIMO
+// =============================================
 int ArbolAVLEdades::maximo(int a, int b) {
     return (a > b) ? a : b;
 }
 
 // =============================================
-// FACTOR DE BALANCE
-// =============================================
-// Calcula la diferencia entre la altura
-// del subárbol izquierdo y derecho.
-//
-// Se utiliza para determinar si el árbol
-// necesita rotaciones.
+// BALANCE
 // =============================================
 int ArbolAVLEdades::obtenerBalance(NodoAVL* nodo) {
     if (nodo == nullptr) return 0;
+
     return altura(nodo->izquierda) - altura(nodo->derecha);
 }
 
 // =============================================
-// ROTACIÓN SIMPLE A LA DERECHA
-// =============================================
-// Se utiliza cuando el árbol queda
-// desbalanceado hacia la izquierda.
+// ROTACIÓN DERECHA
 // =============================================
 NodoAVL* ArbolAVLEdades::rotacionDerecha(NodoAVL* y) {
+
+    if (y == nullptr || y->izquierda == nullptr) {
+        return y;
+    }
+
     NodoAVL* x = y->izquierda;
     NodoAVL* temp = x->derecha;
 
     x->derecha = y;
     y->izquierda = temp;
 
-    y->altura = maximo(altura(y->izquierda), altura(y->derecha)) + 1;
-    x->altura = maximo(altura(x->izquierda), altura(x->derecha)) + 1;
+    y->altura = maximo(
+        altura(y->izquierda),
+        altura(y->derecha)
+    ) + 1;
+
+    x->altura = maximo(
+        altura(x->izquierda),
+        altura(x->derecha)
+    ) + 1;
 
     return x;
 }
 
 // =============================================
-// ROTACIÓN SIMPLE A LA IZQUIERDA
-// =============================================
-// Se utiliza cuando el árbol queda
-// desbalanceado hacia la derecha.
+// ROTACIÓN IZQUIERDA
 // =============================================
 NodoAVL* ArbolAVLEdades::rotacionIzquierda(NodoAVL* x) {
+
+    if (x == nullptr || x->derecha == nullptr) {
+        return x;
+    }
+
     NodoAVL* y = x->derecha;
     NodoAVL* temp = y->izquierda;
 
     y->izquierda = x;
     x->derecha = temp;
 
-    x->altura = maximo(altura(x->izquierda), altura(x->derecha)) + 1;
-    y->altura = maximo(altura(y->izquierda), altura(y->derecha)) + 1;
+    x->altura = maximo(
+        altura(x->izquierda),
+        altura(x->derecha)
+    ) + 1;
+
+    y->altura = maximo(
+        altura(y->izquierda),
+        altura(y->derecha)
+    ) + 1;
 
     return y;
 }
 
 // =============================================
-// INSERCIÓN EN EL ÁRBOL AVL
-// =============================================
-// Inserta pacientes ordenados por edad,
-// manteniendo el árbol balanceado.
+// INSERTAR
 // =============================================
 void ArbolAVLEdades::insertar(Paciente* paciente) {
+
+    if (paciente == nullptr) {
+        cout << "Error: paciente nulo, no se puede insertar en AVL." << endl;
+        return;
+    }
+
     raiz = insertarRecursivo(raiz, paciente);
 }
 
 // =============================================
-// INSERCIÓN RECURSIVA AVL
-// =============================================
-// Inserta el paciente y aplica rotaciones
-// cuando el árbol pierde el balance.
+// INSERTAR RECURSIVO
 // =============================================
 NodoAVL* ArbolAVLEdades::insertarRecursivo(NodoAVL* nodo, Paciente* paciente) {
+
+    if (paciente == nullptr) {
+        return nodo;
+    }
+
     if (nodo == nullptr) {
-        return new NodoAVL(paciente);
+
+        try {
+            return new NodoAVL(paciente);
+        }
+        catch (bad_alloc&) {
+            cout << "Error: no se pudo reservar memoria para AVL." << endl;
+            return nullptr;
+        }
     }
 
     if (paciente->getEdad() < nodo->paciente->getEdad()) {
         nodo->izquierda = insertarRecursivo(nodo->izquierda, paciente);
-    } else if (paciente->getEdad() > nodo->paciente->getEdad()) {
+    }
+    else if (paciente->getEdad() > nodo->paciente->getEdad()) {
         nodo->derecha = insertarRecursivo(nodo->derecha, paciente);
-    } else {
+    }
+    else {
 
-        // Si tienen la misma edad,
-        // se utiliza el ID para ordenar.
         if (paciente->getId() < nodo->paciente->getId()) {
             nodo->izquierda = insertarRecursivo(nodo->izquierda, paciente);
         } else {
@@ -153,28 +169,40 @@ NodoAVL* ArbolAVLEdades::insertarRecursivo(NodoAVL* nodo, Paciente* paciente) {
         }
     }
 
-    nodo->altura = 1 + maximo(altura(nodo->izquierda), altura(nodo->derecha));
+    nodo->altura =
+        1 + maximo(
+            altura(nodo->izquierda),
+            altura(nodo->derecha)
+        );
 
     int balance = obtenerBalance(nodo);
 
-    // Caso izquierda-izquierda (LL)
-    if (balance > 1 && paciente->getEdad() < nodo->izquierda->paciente->getEdad()) {
+    // LL
+    if (balance > 1 &&
+        paciente->getEdad() < nodo->izquierda->paciente->getEdad()) {
+
         return rotacionDerecha(nodo);
     }
 
-    // Caso derecha-derecha (RR)
-    if (balance < -1 && paciente->getEdad() > nodo->derecha->paciente->getEdad()) {
+    // RR
+    if (balance < -1 &&
+        paciente->getEdad() > nodo->derecha->paciente->getEdad()) {
+
         return rotacionIzquierda(nodo);
     }
 
-    // Caso izquierda-derecha (LR)
-    if (balance > 1 && paciente->getEdad() > nodo->izquierda->paciente->getEdad()) {
+    // LR
+    if (balance > 1 &&
+        paciente->getEdad() > nodo->izquierda->paciente->getEdad()) {
+
         nodo->izquierda = rotacionIzquierda(nodo->izquierda);
         return rotacionDerecha(nodo);
     }
 
-    // Caso derecha-izquierda (RL)
-    if (balance < -1 && paciente->getEdad() < nodo->derecha->paciente->getEdad()) {
+    // RL
+    if (balance < -1 &&
+        paciente->getEdad() < nodo->derecha->paciente->getEdad()) {
+
         nodo->derecha = rotacionDerecha(nodo->derecha);
         return rotacionIzquierda(nodo);
     }
@@ -183,29 +211,34 @@ NodoAVL* ArbolAVLEdades::insertarRecursivo(NodoAVL* nodo, Paciente* paciente) {
 }
 
 // =============================================
-// RECORRIDO INORDEN
-// =============================================
-// Muestra los pacientes ordenados
-// por edad de menor a mayor.
+// MOSTRAR INORDEN
 // =============================================
 void ArbolAVLEdades::mostrarInOrden() {
+
+    if (raiz == nullptr) {
+        cout << "El arbol AVL esta vacio." << endl;
+        return;
+    }
+
     inOrdenRecursivo(raiz);
 }
 
 // =============================================
-// RECORRIDO INORDEN RECURSIVO
-// =============================================
-// Visita:
-// izquierda -> raíz -> derecha
+// INORDEN RECURSIVO
 // =============================================
 void ArbolAVLEdades::inOrdenRecursivo(NodoAVL* nodo) {
-    if (nodo == nullptr) return;
+
+    if (nodo == nullptr) {
+        return;
+    }
 
     inOrdenRecursivo(nodo->izquierda);
 
-    nodo->paciente->mostrar();
-    cout << "Altura nodo: " << nodo->altura << endl;
-    cout << "---------------------" << endl;
+    if (nodo->paciente != nullptr) {
+        nodo->paciente->mostrar();
+        cout << "Altura nodo: " << nodo->altura << endl;
+        cout << "---------------------" << endl;
+    }
 
     inOrdenRecursivo(nodo->derecha);
 }

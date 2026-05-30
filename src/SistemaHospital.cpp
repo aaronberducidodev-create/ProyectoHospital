@@ -7,6 +7,7 @@
 #include <fstream>
 #include <sstream> //  NUEVO: sirve para separar datos con |
 #include <vector>
+#include <cctype> // NUEVO: valida si un caracter es digito
 
 
 // =============================================
@@ -21,6 +22,81 @@
 
 
 using namespace std;
+
+
+// =============================================
+// FUNCIONES DE VALIDACION
+// =============================================
+// Estas funciones ayudan a evitar errores cuando
+// el usuario ingresa datos con formato incorrecto.
+// =============================================
+
+bool esNumero(const string& texto) {
+    if (texto.empty()) {
+        return false;
+    }
+
+    for (char c : texto) {
+        if (!isdigit((unsigned char)c)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool edadValida(int edad) {
+    return edad >= 0 && edad <= 120;
+}
+
+bool dpiValido(const string& dpi) {
+    bool dpiValido = true;
+
+    if (dpi.length() != 13) {
+        dpiValido = false;
+    }
+
+    for (char c : dpi) {
+        if (!isdigit((unsigned char)c)) {
+            dpiValido = false;
+            break;
+        }
+    }
+
+    return dpiValido;
+}
+
+bool fechaValida(const string& fecha) {
+    // Formato esperado: YYYY-MM-DD
+    if (fecha.length() != 10) {
+        return false;
+    }
+
+    if (fecha[4] != '-' || fecha[7] != '-') {
+        return false;
+    }
+
+    string anio = fecha.substr(0, 4);
+    string mes = fecha.substr(5, 2);
+    string dia = fecha.substr(8, 2);
+
+    if (!esNumero(anio) || !esNumero(mes) || !esNumero(dia)) {
+        return false;
+    }
+
+    int mesNumero = stoi(mes);
+    int diaNumero = stoi(dia);
+
+    if (mesNumero < 1 || mesNumero > 12) {
+        return false;
+    }
+
+    if (diaNumero < 1 || diaNumero > 31) {
+        return false;
+    }
+
+    return true;
+}
 
 
 // =============================================
@@ -51,16 +127,34 @@ SistemaHospital::SistemaHospital() {
         getline(ss, dpi, '|');
 
         if (idStr != "" && nombre != "" && edadStr != "" && dpi != "") {
-            int id = stoi(idStr);
-            int edad = stoi(edadStr);
 
-            listaPacientes.insertarPaciente(id, nombre, edad, dpi);
+            try {
+                int id = stoi(idStr);
+                int edad = stoi(edadStr);
 
-            Paciente* p = listaPacientes.buscarPaciente(id);
+                if (!edadValida(edad)) {
+                    cout << "Edad fuera de rango al cargar paciente desde MySQL/TXT." << endl;
+                    continue;
+                }
 
-            arbolBST.insertar(p);
-            arbolAVL.insertar(p);
-            hashPacientes.insertar(dpi, p);
+                if (!dpiValido(dpi)) {
+                    cout << "DPI invalido al cargar paciente desde MySQL/TXT." << endl;
+                    continue;
+                }
+
+                listaPacientes.insertarPaciente(id, nombre, edad, dpi);
+
+                Paciente* p = listaPacientes.buscarPaciente(id);
+
+                if (p != nullptr) {
+                    arbolBST.insertar(p);
+                    arbolAVL.insertar(p);
+                    hashPacientes.insertar(dpi, p);
+                }
+            }
+            catch (...) {
+                cout << "Error al cargar paciente desde MySQL/TXT. Datos invalidos." << endl;
+            }
         }
     }
 
@@ -286,8 +380,18 @@ void SistemaHospital::menuPacientes() {
                 continue;
             }
 
+            if (!edadValida(edad)) {
+                cout << "Edad fuera de rango. Debe estar entre 0 y 120." << endl;
+                continue;
+            }
+
             cout << "DPI: ";
             cin >> dpi;
+
+            if (!dpiValido(dpi)) {
+                cout << "DPI invalido. Debe contener exactamente 13 digitos." << endl;
+                continue;
+            }
 
             listaPacientes.insertarPaciente(id, nombre, edad, dpi);
 
@@ -299,7 +403,19 @@ void SistemaHospital::menuPacientes() {
 
             conexion.insertarPaciente(id, nombre, edad, dpi);
 
-            cout << "Paciente registrado correctamente." << endl;
+            cout << "\nPaciente registrado correctamente." << endl;
+            cout << "===== REGISTRO AGREGADO =====" << endl;
+
+            if (paciente != nullptr) {
+                paciente->mostrar();
+            } else {
+                cout << "ID: " << id << endl;
+                cout << "Nombre: " << nombre << endl;
+                cout << "Edad: " << edad << endl;
+                cout << "DPI: " << dpi << endl;
+            }
+
+            cout << "=============================" << endl;
         }
 
         else if (opcion == 2) {
@@ -528,8 +644,18 @@ void SistemaHospital::menuPacientes() {
                     continue;
                 }
 
+                if (!edadValida(nuevaEdad)) {
+                    cout << "Edad fuera de rango. Debe estar entre 0 y 120." << endl;
+                    continue;
+                }
+
                 cout << "Nuevo DPI: ";
                 cin >> nuevoDpi;
+
+                if (!dpiValido(nuevoDpi)) {
+                    cout << "DPI invalido. Debe contener exactamente 13 digitos." << endl;
+                    continue;
+                }
 
                 conexion.actualizarPaciente(id, nuevoNombre, nuevaEdad, nuevoDpi);
 
@@ -774,6 +900,11 @@ void SistemaHospital::menuCitas() {
             cout << "Fecha (YYYY-MM-DD): ";
             getline(cin, fecha);
 
+            if (!fechaValida(fecha)) {
+                cout << "Fecha invalida. Use formato YYYY-MM-DD." << endl;
+                continue;
+            }
+
             cout << "Hora: ";
             getline(cin, hora);
 
@@ -783,7 +914,23 @@ void SistemaHospital::menuCitas() {
             listaCitas.insertarCita(idCita, idPaciente, doctor, fecha, hora, motivo);
             conexion.insertarCita(idCita, idPaciente, fecha, hora, doctor, motivo);
 
-            cout << "Cita registrada correctamente." << endl;
+            cout << "\nCita registrada correctamente." << endl;
+            cout << "===== REGISTRO AGREGADO =====" << endl;
+
+            Cita* citaAgregada = listaCitas.buscarCita(idCita);
+
+            if (citaAgregada != nullptr) {
+                citaAgregada->mostrar();
+            } else {
+                cout << "ID Cita: " << idCita << endl;
+                cout << "ID Paciente: " << idPaciente << endl;
+                cout << "Doctor: " << doctor << endl;
+                cout << "Fecha: " << fecha << endl;
+                cout << "Hora: " << hora << endl;
+                cout << "Motivo: " << motivo << endl;
+            }
+
+            cout << "=============================" << endl;
         }
 
         else if (opcion == 2) {
@@ -872,6 +1019,11 @@ void SistemaHospital::menuCitas() {
             cout << "Nueva fecha (YYYY-MM-DD): ";
             getline(cin, fecha);
 
+            if (!fechaValida(fecha)) {
+                cout << "Fecha invalida. Use formato YYYY-MM-DD." << endl;
+                continue;
+            }
+
             cout << "Nueva hora: ";
             getline(cin, hora);
 
@@ -945,6 +1097,11 @@ void SistemaHospital::menuEstructuras() {
 
             cout << "Ingrese DPI: ";
             cin >> dpi;
+
+            if (!dpiValido(dpi)) {
+                cout << "DPI invalido. Debe contener exactamente 13 digitos." << endl;
+                continue;
+            }
 
             Paciente* paciente = hashPacientes.buscar(dpi);
 

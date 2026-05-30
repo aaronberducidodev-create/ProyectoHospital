@@ -1,5 +1,6 @@
 #include "ListaCitas.h"
 #include <iostream>
+#include <new>
 
 using namespace std;
 
@@ -42,13 +43,26 @@ bool ListaCitas::estaVacia() {
 // =============================================
 // Agrega una nueva cita al final de la lista.
 //
-// Al ser una lista doblemente enlazada,
-// se actualizan los punteros siguiente
-// y anterior.
+// Validaciones:
+// - Evita insertar citas con ID duplicado.
+// - Verifica si hubo error al reservar memoria.
 // =============================================
 void ListaCitas::insertarCita(int idCita, long long idPaciente, string doctor, string fecha, string hora, string motivo) {
-    
-    Cita* nueva = new Cita(idCita, idPaciente, doctor, fecha, hora, motivo);
+
+    if (buscarCita(idCita) != nullptr) {
+        cout << "Error: ya existe una cita con ese ID." << endl;
+        return;
+    }
+
+    Cita* nueva = nullptr;
+
+    try {
+        nueva = new Cita(idCita, idPaciente, doctor, fecha, hora, motivo);
+    }
+    catch (bad_alloc&) {
+        cout << "Error: no se pudo reservar memoria para la cita." << endl;
+        return;
+    }
 
     if (estaVacia()) {
         cabeza = nueva;
@@ -86,26 +100,40 @@ Cita* ListaCitas::buscarCita(int idCita) {
 // Elimina una cita de la lista doblemente
 // enlazada y ajusta los enlaces según
 // su posición.
+//
+// Casos:
+// - Lista vacía o cita no encontrada.
+// - Única cita.
+// - Primera cita.
+// - Última cita.
+// - Cita intermedia.
 // =============================================
 bool ListaCitas::eliminarCita(int idCita) {
     Cita* actual = buscarCita(idCita);
 
     if (actual == nullptr) {
+        cout << "Cita no encontrada para eliminar." << endl;
         return false;
     }
 
     if (actual == cabeza && actual == cola) {
         cabeza = nullptr;
         cola = nullptr;
-    } 
+    }
     else if (actual == cabeza) {
         cabeza = cabeza->siguiente;
-        cabeza->anterior = nullptr;
-    } 
+
+        if (cabeza != nullptr) {
+            cabeza->anterior = nullptr;
+        }
+    }
     else if (actual == cola) {
         cola = cola->anterior;
-        cola->siguiente = nullptr;
-    } 
+
+        if (cola != nullptr) {
+            cola->siguiente = nullptr;
+        }
+    }
     else {
         actual->anterior->siguiente = actual->siguiente;
         actual->siguiente->anterior = actual->anterior;
