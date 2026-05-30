@@ -29,6 +29,9 @@ El proyecto fue desarrollado como parte del proceso de aprendizaje en Ingenierí
 | Visual Studio Code | Editor recomendado    |
 | MinGW g++          | Compilador            |
 | PowerShell         | Ejecución del sistema |
+| Git                | Control de versiones  |
+| GitHub             | Repositorio remoto    |
+| Java JDK 21        | Soporte para PlantUML |
 
 ---
 
@@ -56,9 +59,9 @@ que apuntan a objetos `Paciente`.
 
 Esto permite reutilizar código y trabajar con diferentes tipos de objetos de forma más organizada, facilitando el mantenimiento y crecimiento del sistema.
 
-# 🧩 ESTRUCTURAS DE DATOS IMPLEMENTADAS
-
 ---
+
+# 🧩 ESTRUCTURAS DE DATOS IMPLEMENTADAS
 
 ## 1. Lista Enlazada
 
@@ -241,6 +244,8 @@ Descripción:
 - src/: Código fuente principal.
 - uml/: Diagramas UML del proyecto.
 
+---
+
 # 🚀 INSTALACIÓN Y EJECUCIÓN
 
 ## Requisitos
@@ -295,14 +300,205 @@ Ejecutar el sistema:
 
 Para generar los diagramas UML se requiere:
 
-- Java JDK 21
-- PlantUML
+Java JDK 21
+PlantUML
+
+Ejemplo:
+
+java -jar plantuml.jar DiagramaClases.puml
+📷 DIAGRAMA UML
+Diagrama de Clases
+Nota:(out\uml\DiagramaClases)
+Agregar la imagen cuando exista el archivo:
+
+uml/DiagramaClases.png
+![Diagrama de Clases](uml/DiagramaClases.png)
+
+---
+
+# 🧾 CONTROL DE VERSIONES CON GIT Y GITHUB
+
+El proyecto utiliza Git para el control de versiones y GitHub como plataforma para almacenar el repositorio en la nube.
+
+## Proceso utilizado para subir el proyecto
+
+Primero se abrió PowerShell y se ingresó a la carpeta raíz del proyecto:
+
+```powershell
+cd "C:\Users\Meow\Desktop\ABC WORLD\PROGRAMACION\APP-DEVELOPER\C++\ProyectoHospital"
+```
+
+Luego se inicializó Git dentro del proyecto:
+
+```powershell
+git init
+```
+
+Después se verificó el estado de los archivos:
+
+```powershell
+git status
+```
+
+Se agregaron todos los archivos al área de preparación:
+
+```powershell
+git add .
+```
+
+Luego se creó el primer commit del proyecto:
+
+```powershell
+git commit -m "Proyecto hospitalario inicial"
+```
+
+Se configuró el repositorio remoto de GitHub:
+
+```powershell
+git remote add origin https://github.com/aaronberducidodev-create/ProyectoHospital.git
+```
+
+Se cambió el nombre de la rama principal a `main`:
+
+```powershell
+git branch -M main
+```
+
+Finalmente, se subió el proyecto a GitHub:
+
+```powershell
+git push -u origin main
+```
+
+## Flujo para guardar futuras modificaciones
+
+Cada vez que se realicen cambios en el código, se debe seguir este proceso:
+
+### 1. Abrir PowerShell
+
+### 2. Ingresar a la carpeta del proyecto
+
+```powershell
+cd "C:\Users\Meow\Desktop\ABC WORLD\PROGRAMACION\APP-DEVELOPER\C++\ProyectoHospital"
+```
+
+### 3. Verificar el estado del repositorio
+
+```powershell
+git status
+```
+
+### 4. Agregar los cambios
+
+```powershell
+git add .
+```
+
+### 5. Crear un nuevo commit
+
+```powershell
+git commit -m "Descripción corta del cambio"
+```
+
+### 6. Subir los cambios a GitHub
+
+```powershell
+git push
+```
+
+### Ejemplo
+
+```powershell
+git status
+git add .
+git commit -m "Actualización de módulo de pacientes"
+git push
+```
+
+## Verificar ubicación actual
+
+Para saber en qué carpeta se encuentra PowerShell:
+
+```powershell
+pwd
+```
+
+Ejemplo:
+
+```text
+Path
+----
+C:\Users\Meow\Desktop\ABC WORLD\PROGRAMACION\APP-DEVELOPER\C++\ProyectoHospital
+```
+
+## Verificar que GitHub está actualizado
+
+Después de ejecutar:
+
+```powershell
+git push
+```
+
+puedes comprobar que todo fue enviado correctamente mediante:
+
+```powershell
+git status
+```
+
+Si aparece:
+
+```text
+nothing to commit, working tree clean
+```
+
+significa que todos los cambios locales ya fueron guardados y sincronizados con GitHub.
+
+También puedes ingresar al repositorio en GitHub y verificar que el último commit aparece en la página principal.
+
+## Consultar historial de versiones
+
+Para ver todas las versiones guardadas:
+
+```powershell
+git log --oneline
+```
+
+Ejemplo:
+
+```text
+a1b2c3d Agrega clase Doctor
+9f8e7d6 Proyecto hospitalario inicial
+```
+
+Cada identificador representa una versión del proyecto almacenada por Git.
+
+## Regresar temporalmente a una versión anterior
+
+```powershell
+git checkout ID_DEL_COMMIT
+```
 
 Ejemplo:
 
 ```powershell
-java -jar plantuml.jar DiagramaClases.puml
+git checkout 9f8e7d6
 ```
+
+Para volver a la versión más reciente:
+
+```powershell
+git checkout main
+```
+
+## Explicación rápida
+
+- `git status` muestra qué archivos cambiaron.
+- `git add .` prepara todos los cambios para guardarlos.
+- `git commit -m "mensaje"` crea una nueva versión local del proyecto.
+- `git push` envía los cambios a GitHub.
+- `pwd` muestra la ubicación actual en PowerShell.
+- `git log --oneline` muestra el historial de versiones.
+- `git checkout` permite consultar versiones anteriores.
 
 ---
 
@@ -310,4 +506,8 @@ java -jar plantuml.jar DiagramaClases.puml
 
 Aaron Berducido
 
-Proyecto académico desarrollado en C++ utilizando estructuras de datos avanzadas e integración con MySQL.
+Proyecto académico desarrollado como parte del proceso de aprendizaje en Ingeniería en Sistemas, aplicando Programación Orientada a Objetos, estructuras de datos avanzadas, UML e integración con MySQL.
+
+```
+
+```
