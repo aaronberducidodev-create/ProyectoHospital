@@ -5,12 +5,32 @@
 #include <string>
 #include <limits>
 #include <fstream>
-#include <sstream> // ✅ NUEVO: sirve para separar datos con |
+#include <sstream> //  NUEVO: sirve para separar datos con |
 #include <vector>
 
 
+// =============================================
+// CONSTRUCTOR DEL SISTEMA HOSPITALARIO
+// =============================================
+// Al iniciar el sistema:
+// 1. Obtiene pacientes desde PHP/MySQL.
+// 2. Carga los pacientes en memoria.
+// 3. Inserta los pacientes en Lista, BST, AVL y Hash.
+// 4. Crea las rutas iniciales del hospital para el grafo.
+// =============================================
+
 
 using namespace std;
+
+
+// =============================================
+// MENU PRINCIPAL DEL SISTEMA
+// =============================================
+// Desde aquí se accede a todos los módulos:
+// Pacientes, Citas, Emergencias,
+// Estructuras de Datos, Grafos y MySQL.
+// =============================================
+
 
 SistemaHospital::SistemaHospital() {
 
@@ -195,6 +215,18 @@ void SistemaHospital::iniciar() {
     } while (opcion != 0);
 }
 
+
+// =============================================
+// GESTION DE PACIENTES
+// =============================================
+// Permite:
+// - Registrar pacientes
+// - Consultar pacientes
+// - Eliminar pacientes
+// - Historial médico
+// - Exportar información
+// =============================================
+
 void SistemaHospital::menuPacientes() {
     int opcion;
 
@@ -306,12 +338,13 @@ void SistemaHospital::menuPacientes() {
             }
         }
 
-        // =========================================
-        // NUEVO:
-        // ORDENAMIENTO BURBUJA (BUBBLE SORT)
-        // =========================================
-        // Ordena edades de menor a mayor.
-        // =========================================
+       // =============================================
+       // ORDENAMIENTO BURBUJA (BUBBLE SORT)
+       // =============================================
+       // Ordena las edades de menor a mayor.
+       // Se utiliza únicamente para mostrar
+       // estadísticas ordenadas.
+       // =============================================
 
         for (int i = 0; i < edades.size() - 1; i++) {
 
@@ -551,6 +584,15 @@ void SistemaHospital::menuPacientes() {
     
 }
 
+
+// =============================================
+// COLA DE EMERGENCIAS
+// =============================================
+// Implementa una estructura FIFO.
+// Los pacientes son atendidos según
+// el orden de llegada y prioridad.
+// =============================================
+
 void SistemaHospital::menuEmergencias() {
     int opcion;
 
@@ -664,6 +706,15 @@ void SistemaHospital::menuEmergencias() {
     } while (opcion != 0);
 }
 
+
+
+// =============================================
+// GESTION DE CITAS MEDICAS
+// =============================================
+// Permite registrar, buscar,
+// modificar y eliminar citas.
+// =============================================
+
 void SistemaHospital::menuCitas() {
     int opcion;
 
@@ -694,6 +745,10 @@ void SistemaHospital::menuCitas() {
             cout << "ID Cita: ";
             cin >> idCita;
 
+
+            // Validar que el usuario ingrese un ID numérico válido.
+            // Si ocurre un error en la entrada, se limpia el flujo
+            // y se solicita nuevamente el dato.
             if (cin.fail()) {
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -839,6 +894,15 @@ void SistemaHospital::menuCitas() {
     } while (opcion != 0);
 }
 
+// =============================================
+// ESTRUCTURAS DE DATOS AVANZADAS
+// =============================================
+// Demostración de:
+// - Árbol BST
+// - Árbol AVL
+// - Tabla Hash
+// =============================================
+
 void SistemaHospital::menuEstructuras() {
     int opcion;
 
@@ -893,6 +957,18 @@ void SistemaHospital::menuEstructuras() {
 
     } while (opcion != 0);
 }
+
+// =============================================
+// MAPA Y MEMORIA DEL HOSPITAL
+// =============================================
+// Demuestra algoritmos:
+// - BFS
+// - DFS
+// - Dijkstra // Sirve para encontrar la ruta más corta entre un punto y los demás puntos de un grafo.
+//
+// También incluye simulación de
+// administración de memoria.
+// =============================================
 
 void SistemaHospital::menuHospital() {
     int opcion;
