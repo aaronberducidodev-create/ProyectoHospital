@@ -1,0 +1,207 @@
+@startuml DiagramaClases
+title Sistema Inteligente de Gestion Hospitalaria - UML
+
+class SistemaHospital {
+  - listaPacientes: ListaPacientes
+  - colaEmergencias: ColaEmergencias
+  - listaCitas: ListaCitas
+  - arbolBST: ArbolBSTPacientes
+  - arbolAVL: ArbolAVLEdades
+  - hashPacientes: HashPacientes
+  - memoria: MemoriaHospital
+  - grafo: GrafoHospital
+  - conexion: ConexionMySQL
+  - arbolExpresiones: ArbolExpresiones
+  - arbolB: ArbolB
+
+  + iniciar(): void
+}
+
+class Persona {
+  - id: long long
+  - nombre: string
+  - edad: int
+
+  + mostrar(): void
+  + getId(): long long
+  + getNombre(): string
+  + getEdad(): int
+}
+
+class Paciente {
+  - dpi: string
+  - prioridad: int
+  - historialClinico: Historial
+  + siguiente: Paciente*
+
+  + mostrar(): void
+  + getDpi(): string
+  + setPrioridad(): void
+  + getPrioridad(): int
+  + agregarHistorial(): void
+  + mostrarHistorial(): void
+}
+
+class Historial {
+  + pushHistorial(): void
+  + popHistorial(): void
+  + mostrarHistorial(): void
+}
+
+class ListaPacientes {
+  - cabeza: Paciente*
+
+  + insertarPaciente(): void
+  + buscarPaciente(): Paciente*
+  + eliminarPaciente(): bool
+  + mostrarPacientes(): void
+  + getCabeza(): Paciente*
+  + estaVacia(): bool
+}
+
+class Cita {
+  - id: int
+  - pacienteId: long long
+  - doctor: string
+  - fecha: string
+  - hora: string
+  - motivo: string
+
+  + mostrar(): void
+}
+
+class ListaCitas {
+  - cabeza: Cita*
+  - cola: Cita*
+
+  + insertarCita(): void
+  + buscarCita(): Cita*
+  + eliminarCita(): bool
+  + mostrarAdelante(): void
+  + mostrarAtras(): void
+  + estaVacia(): bool
+}
+
+class ColaEmergencias {
+  - frente: NodoCola*
+  - final: NodoCola*
+
+  + encolar(): void
+  + desencolar(): Paciente*
+  + mostrarCola(): void
+  + estaVacia(): bool
+}
+
+class NodoCola {
+  + paciente: Paciente*
+  + siguiente: NodoCola*
+}
+
+class ArbolBSTPacientes {
+  + insertar(): void
+  + mostrarInOrden(): void
+  + mostrarPreOrden(): void
+  + mostrarPostOrden(): void
+}
+
+class ArbolAVLEdades {
+  + insertar(): void
+  + mostrarInOrden(): void
+}
+
+class HashPacientes {
+  + insertar(): void
+  + buscar(): Paciente*
+  + mostrarTabla(): void
+}
+
+class ArbolB {
+  + insertar(): void
+  + mostrar(): void
+  + limpiar(): void
+}
+
+class GrafoHospital {
+  + agregarRuta(): void
+  + BFS(): void
+  + DFS(): void
+  + dijkstra(): void
+  + mostrarGrafo(): void
+}
+
+class MemoriaHospital {
+  + primerAjuste(): void
+  + mejorAjuste(): void
+  + peorAjuste(): void
+  + liberarBloque(): void
+  + mostrarMemoria(): void
+}
+
+class ConexionMySQL {
+  + conectar(): bool
+  + insertarPaciente(): void
+  + mostrarPacientes(): void
+  + eliminarPaciente(): void
+  + actualizarPaciente(): void
+  + cargarPacientesDesdeMySQL(): void
+  + insertarCita(): void
+  + mostrarCitas(): void
+  + actualizarCita(): void
+  + eliminarCita(): void
+  + cargarIdsPacientesEnArbolB(): void
+}
+
+class ArbolExpresiones {
+  + construirArbol(): void
+  + evaluarExpresion(): double
+}
+
+class Utilidades {
+  + limpiarPantalla(): void
+  + pausa(): void
+  + mostrarTitulo(): void
+}
+
+' ===============================
+' RELACIONES PRINCIPALES
+' ===============================
+
+SistemaHospital *-- ListaPacientes
+SistemaHospital *-- ColaEmergencias
+SistemaHospital *-- ListaCitas
+SistemaHospital *-- ArbolBSTPacientes
+SistemaHospital *-- ArbolAVLEdades
+SistemaHospital *-- HashPacientes
+SistemaHospital *-- MemoriaHospital
+SistemaHospital *-- GrafoHospital
+SistemaHospital *-- ConexionMySQL
+SistemaHospital *-- ArbolExpresiones
+SistemaHospital *-- ArbolB
+
+' ===============================
+' HERENCIA
+' ===============================
+
+Paciente --|> Persona
+
+' ===============================
+' RELACIONES ENTRE CLASES
+' ===============================
+
+Paciente *-- Historial
+ListaPacientes o-- Paciente
+ListaCitas o-- Cita
+ColaEmergencias *-- NodoCola
+NodoCola --> Paciente
+
+ArbolBSTPacientes --> Paciente
+ArbolAVLEdades --> Paciente
+HashPacientes --> Paciente
+
+ConexionMySQL --> ListaPacientes
+ConexionMySQL --> Cita
+ConexionMySQL --> ArbolB
+
+SistemaHospital --> Utilidades
+
+@enduml

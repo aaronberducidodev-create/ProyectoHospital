@@ -1,0 +1,27 @@
+# Ejecutables
+*.exe
+
+# Archivos objeto
+*.o
+*.obj
+
+# Archivos temporales
+*.tmp
+
+# Logs
+*.log
+
+# VS Code
+.vscode/
+
+# Visual Studio
+.vs/
+
+# Mac
+.DS_Store
+
+# Carpeta de compilación
+out/
+
+# Archivos de respaldo
+*.bak

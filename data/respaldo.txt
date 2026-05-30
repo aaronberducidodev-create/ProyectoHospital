@@ -1,0 +1,56 @@
+Orden correcto para crear los archivos
+
+Hazlo en este orden para no perderte:
+
+Paso 1: carpetas
+include
+src
+sql
+data
+
+Paso 2: archivos base
+main.cpp
+Paciente.h
+Paciente.cpp
+Cita.h
+Cita.cpp
+Historial.h
+Historial.cpp
+
+Paso 3: estructuras
+ListaPacientes.h
+ListaPacientes.cpp
+ColaEmergencias.h
+ColaEmergencias.cpp
+ListaCitas.h
+ListaCitas.cpp
+
+Paso 4: estructuras avanzadas
+ArbolBSTPacientes.h
+ArbolBSTPacientes.cpp
+ArbolAVLEdades.h
+ArbolAVLEdades.cpp
+HashPacientes.h
+HashPacientes.cpp
+GrafoHospital.h
+GrafoHospital.cpp
+MemoriaHospital.h
+MemoriaHospital.cpp
+
+Paso 5: sistema general
+ConexionMySQL.h
+ConexionMySQL.cpp
+SistemaHospital.h
+SistemaHospital.cpp
+Utilidades.h
+Utilidades.cpp
+
+Paso 6: apoyo
+hospital_db.sql
+respaldo.txt
+README.md
+
+// para depurar 
+cd "c:\Users\Meow\Desktop\ABC WORLD\PROGRAMACION\APP-DEVELOPER\C++\ProyectoHospital\src\"
+g++ main.cpp Paciente.cpp -o main
+.\main

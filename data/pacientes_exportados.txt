@@ -1,0 +1,45 @@
+ID: 1010
+Nombre: Morti Sanchez
+Edad: 20
+DPI: 2620284860101
+---------------------
+ID: 1008
+Nombre: Rick Sanchez
+Edad: 75
+DPI: 1020284860101
+---------------------
+ID: 1007
+Nombre: Marilyn Sanchez
+Edad: 60
+DPI: 1620284860101
+---------------------
+ID: 1006
+Nombre: Luisa Lopez
+Edad: 25
+DPI: 28204860201
+---------------------
+ID: 1005
+Nombre: Luis Hernandez
+Edad: 35
+DPI: 2023284860105
+---------------------
+ID: 1004
+Nombre: Ana Martinez
+Edad: 22
+DPI: 2023284860104
+---------------------
+ID: 1003
+Nombre: Carlos Ramirez
+Edad: 22
+DPI: 2023284860103
+---------------------
+ID: 1002
+Nombre: Mafer Lopez
+Edad: 31
+DPI: 2023284860102
+---------------------
+ID: 1001
+Nombre: Aaron Santizo
+Edad: 30
+DPI: 2320284860101
+---------------------
