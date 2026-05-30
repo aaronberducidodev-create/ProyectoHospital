@@ -3,12 +3,21 @@
 
 using namespace std;
 
-// Constructor
+// =============================================
+// CONSTRUCTOR DE LISTA DE PACIENTES
+// =============================================
+// Inicializa la lista enlazada vacía.
+// =============================================
 ListaPacientes::ListaPacientes() {
     cabeza = nullptr;
 }
 
-// Destructor
+// =============================================
+// DESTRUCTOR
+// =============================================
+// Libera toda la memoria utilizada por
+// los pacientes almacenados en la lista.
+// =============================================
 ListaPacientes::~ListaPacientes() {
     Paciente* actual = cabeza;
 
@@ -21,12 +30,25 @@ ListaPacientes::~ListaPacientes() {
     cabeza = nullptr;
 }
 
-// Verificar si esta vacia
+// =============================================
+// VERIFICAR SI LA LISTA ESTÁ VACÍA
+// =============================================
+// Retorna true si no existen pacientes
+// registrados en la lista.
+// =============================================
 bool ListaPacientes::estaVacia() {
     return cabeza == nullptr;
 }
 
-// Insertar paciente al inicio
+// =============================================
+// INSERTAR PACIENTE
+// =============================================
+// Inserta un nuevo paciente al inicio
+// de la lista enlazada.
+//
+// Estructura utilizada:
+// Lista simplemente enlazada.
+// =============================================
 void ListaPacientes::insertarPaciente(long long id, string nombre, int edad, string dpi) {
     Paciente* nuevo = new Paciente(id, nombre, edad, dpi);
 
@@ -34,7 +56,12 @@ void ListaPacientes::insertarPaciente(long long id, string nombre, int edad, str
     cabeza = nuevo;
 }
 
-// Buscar paciente por ID
+// =============================================
+// BUSCAR PACIENTE POR ID
+// =============================================
+// Recorre la lista hasta encontrar
+// un paciente con el ID solicitado.
+// =============================================
 Paciente* ListaPacientes::buscarPaciente(long long id) {
     Paciente* actual = cabeza;
 
@@ -49,7 +76,18 @@ Paciente* ListaPacientes::buscarPaciente(long long id) {
     return nullptr;
 }
 
-// Eliminar paciente por ID
+// =============================================
+// ELIMINAR PACIENTE
+// =============================================
+// Elimina un paciente utilizando su ID.
+//
+// Caso 1:
+// El paciente es la cabeza.
+//
+// Caso 2:
+// El paciente se encuentra en cualquier
+// otra posición de la lista.
+// =============================================
 bool ListaPacientes::eliminarPaciente(long long id) {
     if (cabeza == nullptr) {
         return false;
@@ -80,7 +118,12 @@ bool ListaPacientes::eliminarPaciente(long long id) {
     return false;
 }
 
-// Mostrar todos los pacientes
+// =============================================
+// MOSTRAR PACIENTES
+// =============================================
+// Recorre toda la lista enlazada
+// mostrando la información de cada paciente.
+// =============================================
 void ListaPacientes::mostrarPacientes() {
     if (cabeza == nullptr) {
         cout << "No hay pacientes registrados." << endl;
@@ -96,12 +139,14 @@ void ListaPacientes::mostrarPacientes() {
     }
 }
 
-// =========================================
-// NUEVO:
-// Devuelve el inicio de la lista enlazada
-// para poder recorrer pacientes desde
-// otras partes del sistema.
-// =========================================
+// =============================================
+// OBTENER CABEZA DE LA LISTA
+// =============================================
+// Devuelve el primer nodo de la lista.
+//
+// Se utiliza para recorrer pacientes
+// desde otras clases del sistema.
+// =============================================
 Paciente* ListaPacientes::getCabeza() {
     return cabeza;
 }

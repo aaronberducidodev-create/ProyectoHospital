@@ -4,12 +4,29 @@
 
 using namespace std;
 
+// =============================================
+// CONSTRUCTOR DEL ÁRBOL DE EXPRESIONES
+// =============================================
+// Inicializa el árbol vacío.
+// =============================================
 ArbolExpresiones::ArbolExpresiones() {
     raiz = nullptr;
 }
 
-// Construir arbol:
+// =============================================
+// CONSTRUCCIÓN DEL ÁRBOL
+// =============================================
+// Representa la expresión:
+//
 // (CostoConsulta + Medicamentos) * IVA
+//
+// Ejemplo:
+// (500 + 250) * 1.12
+//
+// Se utiliza un árbol binario donde:
+// - Los operadores son nodos internos.
+// - Los números son hojas.
+// =============================================
 void ArbolExpresiones::construirArbol() {
 
     raiz = new NodoExpresion("*");
@@ -21,10 +38,19 @@ void ArbolExpresiones::construirArbol() {
     raiz->izquierda->derecha = new NodoExpresion("250");
 }
 
-// Evaluar recursivamente
+// =============================================
+// EVALUACIÓN RECURSIVA
+// =============================================
+// Recorre el árbol y calcula el resultado
+// de la expresión matemática.
+//
+// Primero resuelve los hijos y luego
+// aplica el operador correspondiente.
+// =============================================
 double ArbolExpresiones::evaluar(NodoExpresion* nodo) {
 
-    // Si es numero
+    // Si el nodo contiene un número,
+    // se convierte a double y se retorna.
     if (nodo->valor != "+" &&
         nodo->valor != "-" &&
         nodo->valor != "*" &&
@@ -36,6 +62,7 @@ double ArbolExpresiones::evaluar(NodoExpresion* nodo) {
     double izq = evaluar(nodo->izquierda);
     double der = evaluar(nodo->derecha);
 
+    // Operaciones matemáticas soportadas
     if (nodo->valor == "+") return izq + der;
     if (nodo->valor == "-") return izq - der;
     if (nodo->valor == "*") return izq * der;
@@ -44,6 +71,12 @@ double ArbolExpresiones::evaluar(NodoExpresion* nodo) {
     return 0;
 }
 
+// =============================================
+// EVALUAR EXPRESIÓN COMPLETA
+// =============================================
+// Inicia la evaluación desde la raíz
+// del árbol de expresiones.
+// =============================================
 double ArbolExpresiones::evaluarExpresion() {
     return evaluar(raiz);
 }

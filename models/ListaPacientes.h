@@ -3,35 +3,78 @@
 
 #include "Paciente.h"
 
+// =============================================
+// LISTA SIMPLE DE PACIENTES
+// =============================================
+// Gestiona todos los pacientes registrados
+// utilizando una lista simplemente enlazada.
+//
+// Cada paciente apunta al siguiente mediante
+// el puntero 'siguiente'.
+// =============================================
 class ListaPacientes {
 private:
+
+    // Primer paciente de la lista
     Paciente* cabeza;
 
  public:
-   //  Constructor
+
+   // =============================================
+   // CONSTRUCTOR
+   // =============================================
+   // Inicializa la lista vacía.
+   // =============================================
    ListaPacientes();
    
-   //   Destructor // Sirve para liberar memoria con delete y evitar fugas de memoria
+   // =============================================
+   // DESTRUCTOR
+   // =============================================
+   // Libera la memoria utilizada por todos
+   // los pacientes almacenados en la lista.
+   // Evita fugas de memoria.
+   // =============================================
    ~ListaPacientes();
 
-   // Operaiones Basicas
+   // =============================================
+   // OPERACIONES BÁSICAS
+   // =============================================
+   // Permiten insertar, buscar y eliminar
+   // pacientes dentro de la lista enlazada.
+   // =============================================
+
    /*
-   void insertarPaciente(int id, string nombre, int edad, string dpi); // Crea un nuevo paciente y lo mete en la lista.
-   Paciente* buscarPaciente(int id); // buscarPaciente(int id)
-   bool eliminarPaciente(int id);  // eliminarPaciente(int id)
-  
+   void insertarPaciente(int id, string nombre, int edad, string dpi);
+   Paciente* buscarPaciente(int id);
+   bool eliminarPaciente(int id);
    */
 
+   // Agrega un nuevo paciente a la lista
    void insertarPaciente(long long id, string nombre, int edad, string dpi);
+
+   // Busca un paciente utilizando su ID
    Paciente* buscarPaciente(long long id);
+
+   // Elimina un paciente por ID
    bool eliminarPaciente(long long id);
-   void mostrarPacientes();   // Recorre toda la lista y muestra todos los pacientes.
- 
-   // NUEVO:
-   // Devuelve el inicio de la lista enlazada 
+
+   // Muestra todos los pacientes registrados
+   void mostrarPacientes();
+
+   // =============================================
+   // ACCESO A LA LISTA
+   // =============================================
+   // Devuelve el primer nodo para recorrer
+   // la lista desde otras clases del sistema.
+   // =============================================
    Paciente* getCabeza();
 
-   // Verifica si la lista esta vacia
+   // =============================================
+   // VERIFICACIÓN
+   // =============================================
+   // Indica si la lista contiene pacientes
+   // o se encuentra vacía.
+   // =============================================
    bool estaVacia();
 
 };

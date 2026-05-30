@@ -3,18 +3,38 @@
 
 using namespace std;
 
+// =============================================
+// CONSTRUCTOR DEL NODO HASH
+// =============================================
+// Crea un nodo que almacena:
+// - DPI (clave)
+// - Paciente asociado
+// - Enlace al siguiente nodo
+// =============================================
 NodoHash::NodoHash(string dpi, Paciente* paciente) {
     this->dpi = dpi;
     this->paciente = paciente;
     this->siguiente = nullptr;
 }
 
+// =============================================
+// CONSTRUCTOR DE LA TABLA HASH
+// =============================================
+// Inicializa todas las posiciones de la tabla
+// en nullptr indicando que están vacías.
+// =============================================
 HashPacientes::HashPacientes() {
     for (int i = 0; i < TAM; i++) {
         tabla[i] = nullptr;
     }
 }
 
+// =============================================
+// DESTRUCTOR
+// =============================================
+// Libera la memoria utilizada por todos los
+// nodos almacenados en la tabla hash.
+// =============================================
 HashPacientes::~HashPacientes() {
     for (int i = 0; i < TAM; i++) {
         NodoHash* actual = tabla[i];
@@ -29,6 +49,15 @@ HashPacientes::~HashPacientes() {
     }
 }
 
+// =============================================
+// FUNCIÓN HASH
+// =============================================
+// Convierte el DPI en una posición válida
+// dentro de la tabla hash.
+//
+// Se suman los caracteres del DPI y luego
+// se aplica módulo con el tamaño de la tabla.
+// =============================================
 int HashPacientes::funcionHash(string dpi) {
     int suma = 0;
 
@@ -39,6 +68,15 @@ int HashPacientes::funcionHash(string dpi) {
     return suma % TAM;
 }
 
+// =============================================
+// INSERTAR PACIENTE
+// =============================================
+// Inserta un paciente utilizando su DPI
+// como clave.
+//
+// Utiliza encadenamiento para resolver
+// colisiones dentro de la tabla hash.
+// =============================================
 void HashPacientes::insertar(string dpi, Paciente* paciente) {
     int indice = funcionHash(dpi);
 
@@ -49,6 +87,14 @@ void HashPacientes::insertar(string dpi, Paciente* paciente) {
     tabla[indice] = nuevo;
 }
 
+// =============================================
+// BUSCAR PACIENTE
+// =============================================
+// Busca un paciente utilizando su DPI.
+//
+// Recorre la lista enlazada de la posición
+// correspondiente hasta encontrar la clave.
+// =============================================
 Paciente* HashPacientes::buscar(string dpi) {
     int indice = funcionHash(dpi);
 
@@ -62,9 +108,16 @@ Paciente* HashPacientes::buscar(string dpi) {
         actual = actual->siguiente;
     }
 
+    // Retorna nullptr si no existe
     return nullptr;
 }
 
+// =============================================
+// MOSTRAR TABLA HASH
+// =============================================
+// Muestra todas las posiciones de la tabla
+// y los elementos almacenados en cada una.
+// =============================================
 void HashPacientes::mostrarTabla() {
     for (int i = 0; i < TAM; i++) {
         cout << "Indice [" << i << "]: ";

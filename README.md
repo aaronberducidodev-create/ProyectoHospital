@@ -510,4 +510,16 @@ Proyecto académico desarrollado como parte del proceso de aprendizaje en Ingeni
 
 ```
 
+
+ARCHIVOS IMPORTANTES
+
+main.cpp
+SistemaHospital.cpp
+Paciente.h / Paciente.cpp
+ListaPacientes.h / ListaPacientes.cpp
+Cita.h / Cita.cpp
+HashPacientes.h / HashPacientes.cpp
+ConexionMySQL.cpp
+hospital_db.sql
+
 ```

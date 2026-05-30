@@ -1,10 +1,23 @@
 #include "../include/MemoriaHospital.h"
 
+// =============================================
+// CONSTRUCTOR DEL BLOQUE DE MEMORIA
+// =============================================
+// Inicializa un bloque libre con tamaño 0.
+// =============================================
 BloqueMemoria::BloqueMemoria() {
     tamano = 0;
     ocupado = false;
 }
 
+// =============================================
+// CONSTRUCTOR DEL GESTOR DE MEMORIA
+// =============================================
+// Simula bloques de memoria, camas o
+// quirófanos disponibles dentro del hospital.
+//
+// Cada bloque tiene un tamaño determinado.
+// =============================================
 MemoriaHospital::MemoriaHospital() {
     bloques[0].tamano = 100;
     bloques[1].tamano = 250;
@@ -18,6 +31,14 @@ MemoriaHospital::MemoriaHospital() {
     bloques[9].tamano = 90;
 }
 
+// =============================================
+// MOSTRAR ESTADO DE MEMORIA
+// =============================================
+// Muestra todos los bloques indicando:
+//
+// - Tamaño disponible.
+// - Si está libre u ocupado.
+// =============================================
 void MemoriaHospital::mostrarMemoria() {
     cout << "=== ESTADO DE MEMORIA / CAMAS / QUIROFANOS ===" << endl;
 
@@ -29,6 +50,15 @@ void MemoriaHospital::mostrarMemoria() {
     }
 }
 
+// =============================================
+// PRIMER AJUSTE (FIRST FIT)
+// =============================================
+// Busca el primer bloque libre que tenga
+// espacio suficiente.
+//
+// Es uno de los algoritmos clásicos de
+// administración de memoria.
+// =============================================
 bool MemoriaHospital::primerAjuste(int tamanoNecesario) {
     for (int i = 0; i < TOTAL_BLOQUES; i++) {
         if (!bloques[i].ocupado && bloques[i].tamano >= tamanoNecesario) {
@@ -42,6 +72,14 @@ bool MemoriaHospital::primerAjuste(int tamanoNecesario) {
     return false;
 }
 
+// =============================================
+// MEJOR AJUSTE (BEST FIT)
+// =============================================
+// Busca el bloque libre más pequeño
+// capaz de almacenar el tamaño solicitado.
+//
+// Reduce desperdicio de espacio.
+// =============================================
 bool MemoriaHospital::mejorAjuste(int tamanoNecesario) {
     int mejorIndice = -1;
 
@@ -63,6 +101,14 @@ bool MemoriaHospital::mejorAjuste(int tamanoNecesario) {
     return false;
 }
 
+// =============================================
+// PEOR AJUSTE (WORST FIT)
+// =============================================
+// Busca el bloque libre más grande
+// disponible.
+//
+// Intenta evitar fragmentación temprana.
+// =============================================
 bool MemoriaHospital::peorAjuste(int tamanoNecesario) {
     int peorIndice = -1;
 
@@ -84,6 +130,12 @@ bool MemoriaHospital::peorAjuste(int tamanoNecesario) {
     return false;
 }
 
+// =============================================
+// LIBERAR BLOQUE
+// =============================================
+// Marca un bloque ocupado como disponible
+// nuevamente.
+// =============================================
 void MemoriaHospital::liberarBloque(int posicion) {
     if (posicion < 0 || posicion >= TOTAL_BLOQUES) {
         cout << "Posicion invalida." << endl;

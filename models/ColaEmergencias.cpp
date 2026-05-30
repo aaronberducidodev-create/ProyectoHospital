@@ -3,26 +3,50 @@
 
 using namespace std;
 
+// =============================================
+// CONSTRUCTOR DEL NODO DE COLA
+// =============================================
+// Cada nodo almacena un paciente y apunta
+// al siguiente nodo de la cola.
+// =============================================
 NodoCola::NodoCola(Paciente* paciente) {
     this->paciente = paciente;
     this->siguiente = nullptr;
 }
 
+// =============================================
+// CONSTRUCTOR DE COLA DE EMERGENCIAS
+// =============================================
+// Inicializa la cola vacía.
+// =============================================
 ColaEmergencias::ColaEmergencias() {
     frente = nullptr;
     final = nullptr;
 }
 
+// =============================================
+// DESTRUCTOR
+// =============================================
+// Libera todos los nodos pendientes
+// de la cola.
+// =============================================
 ColaEmergencias::~ColaEmergencias() {
     while (!estaVacia()) {
         desencolar();
     }
 }
 
+// Verifica si la cola está vacía.
 bool ColaEmergencias::estaVacia() {
     return frente == nullptr;
 }
 
+// =============================================
+// ENCOLAR PACIENTE
+// =============================================
+// Agrega un paciente a la cola de emergencias
+// según su prioridad de triaje.
+// =============================================
 void ColaEmergencias::encolar(Paciente* paciente) {
     NodoCola* nuevo = new NodoCola(paciente);
 
@@ -70,6 +94,13 @@ void ColaEmergencias::encolar(Paciente* paciente) {
         final = nuevo;
     }
 }
+
+// =============================================
+// DESENCOLAR PACIENTE
+// =============================================
+// Atiende y elimina al paciente que está
+// al frente de la cola.
+// =============================================
 Paciente* ColaEmergencias::desencolar() {
     if (estaVacia()) {
         return nullptr;
@@ -88,6 +119,12 @@ Paciente* ColaEmergencias::desencolar() {
     return pacienteAtendido;
 }
 
+// =============================================
+// MOSTRAR COLA
+// =============================================
+// Recorre la cola y muestra todos los
+// pacientes pendientes de atención.
+// =============================================
 void ColaEmergencias::mostrarCola() {
     if (estaVacia()) {
         cout << "No hay pacientes en emergencia." << endl;
