@@ -691,15 +691,15 @@ void SistemaHospital::menuPacientes() {
         cout << "No hay pacientes registrados para exportar." << endl;
     }
 
-    while (actual != nullptr) {
-        archivo << actual->getId() << ","
-                << actual->getNombre() << ","
-                << actual->getEdad() << ","
-                << actual->getDpi()
-                << "\n";
+   while (actual != nullptr) {
+    archivo << actual->getId() << ","
+            << actual->getNombre() << ","
+            << actual->getEdad() << ","
+            << "=\"" << actual->getDpi() << "\""
+            << "\n";
 
-        actual = actual->siguiente;
-    }
+    actual = actual->siguiente;
+}
 
     archivo.close();
 
