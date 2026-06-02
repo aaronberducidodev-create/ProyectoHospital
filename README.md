@@ -374,7 +374,7 @@ git add .
 Luego se creó el primer commit del proyecto:
 
 ```powershell
-git commit -m "Proyecto hospitalario inicial"
+git commit -m "Arreglo de la hoja de excel DPI problema"
 ```
 
 Se configuró el repositorio remoto de GitHub:
