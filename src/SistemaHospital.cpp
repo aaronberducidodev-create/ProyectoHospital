@@ -333,7 +333,7 @@ void SistemaHospital::menuPacientes() {
         cout << "5. Registrar historial medico" << endl;
         cout << "6. Consultar historial medico" << endl;
         cout << "7. Modificar datos del Paciente" << endl;
-        cout << "8. Exportar pacientes a TXT" << endl;
+        cout << "8. Exportar pacientes a CSV para Excel" << endl;
         cout << "0. Regresar" << endl;
         cout << "Seleccione una opcion: ";
         cin >> opcion;
@@ -666,42 +666,45 @@ void SistemaHospital::menuPacientes() {
             }
         }
 
-        else if (opcion == 8) {
-            // =========================================
-            // NUEVO:
-            // EXPORTAR PACIENTES A TXT
-            // =========================================
-            // Se utiliza procesamiento de archivos
-            // mediante ofstream.
-            // =========================================
+      else if (opcion == 8) {
+    // =========================================
+    // EXPORTAR PACIENTES A CSV
+    // =========================================
+    // CSV significa Comma Separated Values.
+    // Este formato se puede abrir directamente
+    // en Microsoft Excel o Google Sheets.
+    // =========================================
 
-            ofstream archivo("data/pacientes_exportados.txt");
+    ofstream archivo("data/pacientes_exportados.csv");
 
-            if (!archivo.is_open()) {
-                cout << "Error al crear archivo de pacientes." << endl;
-                continue;
-            }
+    if (!archivo.is_open()) {
+        cout << "Error al crear archivo CSV de pacientes." << endl;
+        continue;
+    }
 
-            Paciente* actual = listaPacientes.getCabeza();
+    Paciente* actual = listaPacientes.getCabeza();
 
-            if (actual == nullptr) {
-                archivo << "No hay pacientes registrados." << endl;
-            }
+    // Encabezados para Excel
+    archivo << "ID,Nombre,Edad,DPI\n";
 
-            while (actual != nullptr) {
-                archivo << "ID: " << actual->getId() << endl;
-                archivo << "Nombre: " << actual->getNombre() << endl;
-                archivo << "Edad: " << actual->getEdad() << endl;
-                archivo << "DPI: " << actual->getDpi() << endl;
-                archivo << "---------------------" << endl;
+    if (actual == nullptr) {
+        cout << "No hay pacientes registrados para exportar." << endl;
+    }
 
-                actual = actual->siguiente;
-            }
+    while (actual != nullptr) {
+        archivo << actual->getId() << ","
+                << actual->getNombre() << ","
+                << actual->getEdad() << ","
+                << actual->getDpi()
+                << "\n";
 
-            archivo.close();
+        actual = actual->siguiente;
+    }
 
-            cout << "Pacientes exportados correctamente en data/pacientes_exportados.txt" << endl;
-        }
+    archivo.close();
+
+    cout << "Pacientes exportados correctamente en data/pacientes_exportados.csv" << endl;
+}
 
 
     } while (opcion != 0);

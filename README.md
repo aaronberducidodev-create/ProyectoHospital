@@ -158,13 +158,13 @@ El sistema implementa procesamiento de archivos utilizando:
 Permitiendo:
 
 - Exportar pacientes
-- Generar archivos TXT
+- Generar archivos CSV
 - Persistencia local
 
 Archivo generado:
 
 ```text
-pacientes_exportados.txt
+pacientes_exportados.csv
 ```
 
 ---
@@ -178,9 +178,36 @@ El sistema implementa persistencia híbrida mediante:
 - Pacientes
 - Citas médicas
 
-## Persistencia TXT
+## Persistencia CSV
 
-El sistema también implementa exportación de pacientes a archivos TXT utilizando `ofstream` y `fstream`.
+El sistema implementa exportación de pacientes a archivos CSV utilizando `ofstream` y `fstream`, permitiendo abrir los reportes directamente en Microsoft Excel y Google Sheets.
+
+Archivo generado:
+
+pacientes_exportados.csv
+
+---
+
+# 🗑️ ELIMINACIÓN LÓGICA (SOFT DELETE)
+
+El sistema implementa eliminación lógica de pacientes mediante el campo `activo`.
+
+- activo = 1 → Paciente visible.
+- activo = 0 → Paciente oculto.
+
+Los registros no se eliminan físicamente de la base de datos, permitiendo conservar historiales médicos, citas y evitar la pérdida accidental de información.
+
+Ejemplo:
+
+| ID   | Nombre     | Activo |
+| ---- | ---------- | ------ |
+| 1001 | Juan Pérez | 1      |
+
+↓
+
+| ID   | Nombre     | Activo |
+| ---- | ---------- | ------ |
+| 1001 | Juan Pérez | 0      |
 
 ---
 
@@ -263,15 +290,13 @@ Descripción:
 
 ## Compilación
 
-Abrir PowerShell y ubicarse en la carpeta raíz del proyecto.
-
-**Nota:** La ubicación del proyecto puede variar según el equipo utilizado. El siguiente comando corresponde al entorno de desarrollo del autor y se muestra únicamente como ejemplo.
+Abrir PowerShell y ubicarse en la carpeta raíz del proyecto:
 
 ```powershell
 cd "C:\Users\Meow\Desktop\ABC WORLD\PROGRAMACION\APP-DEVELOPER\C++\ProyectoHospital"
 ```
 
-Una vez ubicado en la carpeta raíz del proyecto, compilar el sistema con:
+Compilar el sistema con:
 
 ```powershell
 g++ src\*.cpp models\*.cpp database\*.cpp -Iinclude -Imodels -Idatabase -g -o src\main.exe
@@ -285,12 +310,12 @@ g++ src\*.cpp models\*.cpp database\*.cpp -Iinclude -Imodels -Idatabase -g -o sr
 - `-Iinclude` → Agrega la carpeta include al buscador de encabezados.
 - `-Imodels` → Agrega la carpeta models al buscador de encabezados.
 - `-Idatabase` → Agrega la carpeta database al buscador de encabezados.
-- `-g` → Incluye información de depuración para facilitar el análisis de errores.
-- `-o src\main.exe` → Genera el ejecutable principal del sistema.
+- `-g` → Incluye información de depuración.
+- `-o src\main.exe` → Genera el ejecutable principal.
 
 ## Ejecución
 
-Ejecutar el sistema:
+Ejecutar el sistema con:
 
 ```powershell
 .\src\main.exe
